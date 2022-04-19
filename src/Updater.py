@@ -26,8 +26,8 @@ s.headers = {
 }
 
 # initialize consts
-github_release_api_url1 = 'https://api.github.com/repos/{owner}/{repo}/releases'
-#github_release_api_url2 = 'https://api.github.com/repos/{owner}/{repo}/releases'
+github_release_api_url1 = 'https://api.github.com/repos/{\\owner}/{\\repo}/releases'
+#github_release_api_url2 = 'https://api.github.com/repos/{\\owner}/{\\repo}/releases'
 
 # read config.json
 with open("config.json","r") as conf:
@@ -40,14 +40,14 @@ elif updateConf.get('channel') == 'beta':
 else:
     print('Unknown channel.')
 
-{module1} = updateConf.get({module1})
+{\\module1} = updateConf.get({\\module1})
 ## add more modules
 
 response1 = s.get(github_release_api_url1, verify = False).text.strip('[]')
 remoteVer1 = json.loads(response1).get('tag_name')
 
 # compare local and remote
-if remoteVer1 is {module1}:
+if remoteVer1 is {\\module1}:
     print('You have the latest release.')
 else:
     print('A newer version has been released.')
@@ -63,7 +63,7 @@ else:
     else:
         print('Unknown system')
 
-    download_url = 'https://github.com/{owner}/{repo}/releases/download/{tag_name}/{package_name}-' + sysType + '.zip'
+    download_url = 'https://github.com/{\\owner}/{\\repo}/releases/download/' + remoteVer1 + '/{\\package_name}-' + sysType + '.zip'
     path = 'temp.zip'
     wget.download(download_url, path)
 
