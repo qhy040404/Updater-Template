@@ -11,10 +11,6 @@ import wget
 def un_zip(file_name):
     """unzip zip file"""
     zip_file = zipfile.ZipFile(file_name)
-    if os.path.isdir('update'):
-        pass
-    else:
-        os.mkdir('update')
     for names in zip_file.namelist():
         zip_file.extract(names, 'update/')
     zip_file.close()
@@ -32,6 +28,7 @@ github_release_api_url1 = 'https://api.github.com/repos/{owner}/{repo}/releases'
 # read config.json
 with open("config.json","r") as conf:
     updateConf = json.load(conf)
+    conf.close()
 
 if updateConf.get('channel') == 'stable':
     github_release_api_url1 += '/latest'
@@ -56,7 +53,10 @@ else:
 
     updateChoice = input('Update?(Y/N)')
     if updateChoice == 'Y' or updateChoice == 'y':
-        pass
+        os.mkdir('update')
+        updateConf.update({module1} = remoteVer1)
+        with open("update/config.json","w") as conf:
+            json.dump(updateConf, conf)
     else:
         sys.exit()
 
@@ -71,7 +71,12 @@ else:
 
     download_url = 'https://github.com/{owner}/{repo}/releases/download/' + remoteVer1 + '/{package_name}-' + sysType + '.zip'
     path = 'temp.zip'
-    wget.download(download_url, path)
+    try:
+        wget.download(download_url, path)
+    except Exception as e:
+        print('Error')
+        print(e)
+        sys.exit()
 
     un_zip('temp.zip')
 
