@@ -1,7 +1,8 @@
 # Updater Template
 This is a template of updater.
 ## Use
-- You need to change data in ```config.json``` and ```Updater.py```
+- Press ```Use this template```
+- You need to modify data in ```config.json``` and ```Updater.py```
 ## Detail
 - ```config.json```
     - ```channel``` : ```stable``` or ```beta```
