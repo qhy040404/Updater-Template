@@ -21,11 +21,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Updater.py" />
+    <Content Include="requirements.txt" />
+    <Content Include="src\config.json" />
+    <Content Include="src\update.bat" />
+    <Content Include="src\update.sh" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.json" />
-    <Content Include="requirements.txt" />
+    <Folder Include="src\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\Updater.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
