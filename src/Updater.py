@@ -26,33 +26,39 @@ s.headers = {
 }
 
 # initialize consts
-github_release_api_url1 = 'https://api.github.com/repos/{\\owner}/{\\repo}/releases'
-#github_release_api_url2 = 'https://api.github.com/repos/{\\owner}/{\\repo}/releases'
+github_release_api_url1 = 'https://api.github.com/repos/{owner}/{repo}/releases'
+#github_release_api_url2 = 'https://api.github.com/repos/{owner}/{repo}/releases'
 
 # read config.json
 with open("config.json","r") as conf:
     updateConf = json.load(conf)
 
 if updateConf.get('channel') == 'stable':
-    github_release_api_url += '/latest'
+    github_release_api_url1 += '/latest'
 elif updateConf.get('channel') == 'beta':
-    github_release_api_url += '?per_page=1'
+    github_release_api_url1 += '?per_page=1'
 else:
     print('Unknown channel.')
 
-{\\module1} = updateConf.get({\\module1})
+{module1} = updateConf.get({module1})
 ## add more modules
 
 response1 = s.get(github_release_api_url1, verify = False).text.strip('[]')
 remoteVer1 = json.loads(response1).get('tag_name')
 
 # compare local and remote
-if remoteVer1 is {\\module1}:
+if remoteVer1 is {module1}:
     print('You have the latest release.')
 else:
     print('A newer version has been released.')
     print('New:' + remoteVer1)
     print(json.loads(response1).get('body'))
+
+    updateChoice = input('Update?(Y/N)')
+    if updateChoice == 'Y' or updateChoice == 'y':
+        pass
+    else:
+        sys.exit()
 
     if platform.system() == 'Windows':
         sysType = 'win'
@@ -63,7 +69,7 @@ else:
     else:
         print('Unknown system')
 
-    download_url = 'https://github.com/{\\owner}/{\\repo}/releases/download/' + remoteVer1 + '/{\\package_name}-' + sysType + '.zip'
+    download_url = 'https://github.com/{owner}/{repo}/releases/download/' + remoteVer1 + '/{package_name}-' + sysType + '.zip'
     path = 'temp.zip'
     wget.download(download_url, path)
 
