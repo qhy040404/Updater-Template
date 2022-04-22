@@ -29,6 +29,10 @@ urllib3.disable_warnings()
 github_release_api_url1 = 'https://api.github.com/repos/{owner}/{repo}/releases/latest'
 #github_release_api_url2 = 'https://api.github.com/repos/{owner}/{repo}/releases/latest'
 
+# delete old files
+if os.path.exists('update'):
+    shutil.rmtree('update')
+
 # read config.json
 with open("config.json","r") as conf:
     updateConf = json.load(conf)
