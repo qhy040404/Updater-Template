@@ -45,11 +45,11 @@ with open("config.json","r") as conf:
 
 localVer = updateConf.get(module_name)
 localVerVal = localVer.split('.')
-## add more modules
 
 response = s.get(github_release_api_url, verify = False).text.strip('[]')
 remoteVer = json.loads(response).get('tag_name')
-remoteVerVal = remoteVer.split('.')
+remoteVerNum = remoteVer.strip('v')
+remoteVerVal = remoteVerNum.split('.')
 
 # compare local and remote
 verCount = len(localVerVal)
