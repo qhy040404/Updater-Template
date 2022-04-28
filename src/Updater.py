@@ -10,6 +10,12 @@ import urllib3
 import json
 import wget
 
+# config inside
+owner = ''
+repo = ''
+module_name = ''
+package_name = ''
+
 # define func
 def un_zip(file_name):
     """unzip zip file"""
@@ -26,8 +32,7 @@ s.headers = {
 urllib3.disable_warnings()
 
 # initialize consts
-github_release_api_url1 = 'https://api.github.com/repos/{owner}/{repo}/releases/latest'
-#github_release_api_url2 = 'https://api.github.com/repos/{owner}/{repo}/releases/latest'
+github_release_api_url = 'https://api.github.com/repos/' + owner + '/' + repo + '/releases/latest'
 
 # delete old files
 if os.path.exists('update'):
@@ -38,26 +43,26 @@ with open("config.json","r") as conf:
     updateConf = json.load(conf)
     conf.close()
 
-{module1}ver = updateConf.get({module1})
+localVer = updateConf.get(module_name)
 ## add more modules
 
-response1 = s.get(github_release_api_url1, verify = False).text.strip('[]')
-remoteVer1 = json.loads(response1).get('tag_name')
+response = s.get(github_release_api_url, verify = False).text.strip('[]')
+remoteVer = json.loads(response).get('tag_name')
 
 # compare local and remote
-if remoteVer1 == {module1}ver:
+if remoteVer == localVer:
     print('You have the latest release.')
     time.sleep(2)
     sys.exit()
 else:
     print('A newer version has been released.')
-    print('New:' + remoteVer1)
-    print(json.loads(response1).get('body'))
+    print('New:' + remoteVer)
+    print(json.loads(response).get('body'))
 
     updateChoice = input('Update?(Y/N)')
     if updateChoice == 'Y' or updateChoice == 'y':
         os.mkdir('update')
-        updateConf.update({module1}ver = remoteVer1)
+        updateConf[module_name] = remoteVer
     else:
         sys.exit()
 
@@ -70,7 +75,7 @@ else:
     else:
         print('Unknown system')
 
-    download_url = 'https://github.com/{owner}/{repo}/releases/download/' + remoteVer1 + '/{package_name}-' + sysType + '.zip'
+    download_url = 'https://github.com/' + owner + '/' + repo + '/releases/download/' + remoteVer + '/' + package_name + '-' + sysType + '.zip'
     path = 'temp.zip'
     try:
         wget.download(download_url, path)
