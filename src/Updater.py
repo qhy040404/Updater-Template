@@ -44,13 +44,22 @@ with open("config.json","r") as conf:
     conf.close()
 
 localVer = updateConf.get(module_name)
+localVerVal = localVer.split('.')
 ## add more modules
 
 response = s.get(github_release_api_url, verify = False).text.strip('[]')
 remoteVer = json.loads(response).get('tag_name')
+remoteVerVal = remoteVer.split('.')
 
 # compare local and remote
-if remoteVer == localVer:
+verCount = len(localVerVal)
+latest = True
+for i in range(verCount):
+    if localVerVal[i] < remoteVerVal[i]:
+        latest = False
+
+# compare operation
+if latest:
     print('You have the latest release.')
     time.sleep(2)
     sys.exit()
