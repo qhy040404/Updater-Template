@@ -11,11 +11,6 @@ import requests
 import urllib3
 import wget
 
-# config inside
-owner = ''
-repo = ''
-module_name = ''
-package_name = ''
 
 # define func
 def un_zip(file_name):
@@ -24,6 +19,18 @@ def un_zip(file_name):
     for names in zip_file.namelist():
         zip_file.extract(names, 'update/')
     zip_file.close()
+
+
+# read config.json
+with open("config.json", "r") as conf:
+    updateConf = json.load(conf)
+
+module_count = len(updateConf)/5
+
+owner = updateConf['owner']
+repo = updateConf['repo']
+module_name = updateConf['module_name']
+package_name = updateConf['package_name']
 
 # initialize session
 s = requests.session()
@@ -39,15 +46,10 @@ github_release_api_url = 'https://api.github.com/repos/' + owner + '/' + repo + 
 if os.path.exists('update'):
     shutil.rmtree('update')
 
-# read config.json
-with open("config.json","r") as conf:
-    updateConf = json.load(conf)
-    conf.close()
-
 localVer = updateConf.get(module_name)
 localVerVal = localVer.split('.')
 
-response = s.get(github_release_api_url, verify = False).text.strip('[]')
+response = s.get(github_release_api_url, verify=False).text.strip('[]')
 remoteVer = json.loads(response).get('tag_name')
 remoteVerNum = remoteVer.strip('v')
 remoteVerVal = remoteVerNum.split('.')
@@ -97,9 +99,8 @@ else:
     un_zip('temp.zip')
     if os.path.exists('update/config.json'):
         os.remove('update/config.json')
-    with open("update/config.json","w") as conf:
+    with open("update/config.json", "w") as conf:
         json.dump(updateConf, conf)
-
 
     if sysType == 'win':
         os.system('start update.bat')
